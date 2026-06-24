@@ -1,0 +1,10 @@
+CI/CD — Not Implemented
+========================
+
+I could not allocate time to set up CI/CD for this project.
+
+The automation suite is designed to run locally via pytest. See emi-automation/README.md for setup and execution steps.
+
+For reference on CI/CD and related topics, I have previously published articles here:
+
+https://medium.com/@chhunjus

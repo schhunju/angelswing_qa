@@ -3,7 +3,7 @@
 End-to-end test automation for [emicalculator.net](https://emicalculator.net/) using **pytest**, **Playwright**, and a Page Object Model. The suite validates EMI calculation accuracy, payment schedule consistency, and Excel export parity against on-screen results.
 
 **Target application:** Home Loan tab (primary scope)  
-**Reference test plan:** `../EMI_Calculator_Test_Plan.md`, `../EMI_Calculator_Test_Cases.txt`
+**Reference test plan:** `../EMI_Calculator_Test_Cases.txt`, `../EMI_Calculator_Test_Plan.txt`
 
 ---
 
@@ -310,5 +310,5 @@ Disabled plugins (known teardown conflicts): `html-reporter`, `reportportal`, `b
 
 ## Related Documents
 
-- `../EMI_Calculator_Test_Plan.md` — strategy, formula reference, TC-CALC matrix
 - `../EMI_Calculator_Test_Cases.txt` — detailed manual test cases
+- `../EMI_Calculator_Test_Plan.txt` — strategy, formula reference, TC-CALC matrix
