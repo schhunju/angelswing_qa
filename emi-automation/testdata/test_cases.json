@@ -1,0 +1,26 @@
+{
+  "slider_test_case": {
+    "id": "TC-SMK-01",
+    "description": "₹10L, 10.5%, 10 Yr",
+    "principal": 1000000,
+    "rate": 10.5,
+    "tenure_years": 10
+  },
+  "schedule_reference_case": {
+    "id": "TC-FN-09",
+    "description": "₹10L, 10.5%, 10 Yr",
+    "principal": 1000000,
+    "rate": 10.5,
+    "tenure_years": 10
+  },
+  "year_formats": [
+    {
+      "value": "calendaryear",
+      "label": "Calendar Year wise"
+    },
+    {
+      "value": "financialyear",
+      "label": "Financial Year wise"
+    }
+  ]
+}

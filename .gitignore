@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# IDE
+.idea/
+
+# Test artifacts
+emi-automation/reports/
+emi-automation/log/
+*.png
+
+# OS
+.DS_Store

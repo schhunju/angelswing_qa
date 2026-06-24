@@ -1,0 +1,489 @@
+EMI CALCULATOR - TEST CASES
+================================================================================
+
+Site:       https://emicalculator.net/
+Scope:      Calculator module only
+Date:       June 23, 2026
+Owner:      Sharad Chhunju
+Reference:  EMI_Calculator_Test_Plan.txt
+
+Note: All test cases apply within the calculator UI only. Allow +/- Rs. 1 for
+      rounding on calculated values. Check the pie chart is present wherever
+      calculator results are displayed.
+
+Default preconditions apply unless a case lists its own:
+  - Testing is limited to the calculator module
+  - Desktop viewport, responsiveness is out of scope
+
+
+================================================================================
+1. SMOKE TESTING
+================================================================================
+TC-SMK-01 | P0 | Verify that calculator loads and baseline home loan returns correct EMI for Rs. 10L at 10.5% for 10 years
+--------------------------------------------------------------------------------
+Preconditions:
+  - https://emicalculator.net/ is accessible
+  - Chrome desktop browser, 1920x1080 resolution
+
+Test Data:
+  Tab:      Home Loan
+  Amount:   Rs. 10,00,000
+  Rate:     10.5%
+  Tenure:   10 years
+
+Steps:
+    1. Open https://emicalculator.net/
+    2. Confirm the Home Loan tab is selected by default
+    3. Check loan tabs, input fields, sliders, results area, and pie chart are present
+    4. Enter loan amount Rs. 10,00,000, interest rate 10.5%, and tenure 10 years
+    5. Check Loan EMI, Total Interest Payable, and Total Payment in the results area
+    6. Check the pie chart in the results area
+
+
+Expected Result:
+  The calculator loads with all controls visible. EMI is Rs. 13,493, Interest is Rs. 6,19,220, Total is Rs. 16,19,220, and the pie chart is present.
+
+
+TC-SMK-02 | P0 | Verify that baseline home loan calculation returns correct EMI for Rs. 50L at 9% for 20 years
+--------------------------------------------------------------------------------
+Preconditions:
+  - https://emicalculator.net/ is accessible
+  - Chrome desktop browser, 1920x1080 resolution
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Tab:      Home Loan
+  Amount:   Rs. 50,00,000
+  Rate:     9%
+  Tenure:   20 years
+
+Steps:
+    1. Open https://emicalculator.net/
+    2. Enter loan amount Rs. 50,00,000, interest rate 9%, and tenure 20 years
+    3. Check Loan EMI, Total Interest Payable, and Total Payment in the results area
+    4. Check the pie chart in the results area
+
+
+Expected Result:
+  The calculator displays EMI Rs. 44,986, Interest Rs. 57,96,711, and Total Rs. 1,07,96,711, and the pie chart is present.
+
+
+
+================================================================================
+2. FUNCTIONAL TESTING
+================================================================================
+
+--- 2.1 Loan Tabs ---
+TC-FN-01 | P0 | Verify that all loan tabs switch correctly and Car Loan shows EMI Scheme
+--------------------------------------------------------------------------------
+Preconditions:
+  - https://emicalculator.net/ is accessible
+  - Desktop browser, 1920x1080 resolution
+  - Calculator module is visible
+
+Test Data:  None
+
+Steps:
+    1. Open https://emicalculator.net/
+    2. Confirm the Home Loan tab is active and the label reads Home Loan Amount
+    3. Click the Personal Loan tab and check inputs and labels update
+    4. Click the Car Loan tab and check EMI in Advance and EMI in Arrears options are visible
+    5. Confirm the EMI Scheme section is not visible on Home or Personal Loan tabs
+
+
+Expected Result:
+  Home Loan is default. Personal and Car tabs activate with correct labels. EMI Scheme appears only on Car Loan with Advance and Arrears options.
+
+
+
+--- 2.2 Inputs ---
+TC-FN-02 | P0 | Verify that loan amount boundaries, text entry, and edge behaviour work correctly
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Slider min: 0 | Slider max: 200L | Type: 2500000 | Type above max: 30000000 | Type negative: -5000000 | Paste: 50,00,000
+
+Steps:
+    1. Move the loan amount slider to minimum and check amount shows Rs. 0 without error
+    2. Move the slider to 200L and check amount shows Rs. 2,00,00,000 with EMI recalculated
+    3. Type 2500000, tab out, and check formatting and slider sync
+    4. Change amount via slider again and confirm slider and text field stay in sync
+    5. Paste 50,00,000 and check value is parsed and EMI recalculates
+    6. Type 30000000, tab out, and check value above slider maximum is accepted with EMI recalculated
+    7. Type -5000000, tab out, and check negative value converts to Rs. 50,00,000
+
+
+Expected Result:
+  Slider range is Rs. 0 to Rs. 2,00,00,000. Text field, slider, and paste stay in sync. Typed values above slider max are accepted. Negative values convert to positive and EMI recalculates.
+
+
+TC-FN-03 | P0 | Verify that interest rate boundaries and slider-text sync work correctly
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Amount: Rs. 50,00,000 | Tenure: 20 years | Rate min: 5% | Rate max: 20%
+
+Steps:
+    1. Set loan amount and tenure to test data values
+    2. Set interest rate to 5% via slider and check EMI recalculates
+    3. Set interest rate to 20% via slider and check EMI recalculates
+    4. Set rate using slider, then change via text field, then via slider again
+    5. Check slider and text field always show the same rate after each change
+
+
+Expected Result:
+  Rate range 5% to 20% calculates correctly. Slider and text field stay in sync.
+
+
+TC-FN-04 | P0 | Verify that tenure Yr/Mo toggle preserves EMI and month entry calculates correctly
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Years: Rs. 50,00,000 | 9% | 20 years
+  Months: Rs. 10,00,000 | 10.5% | 120 months
+
+Steps:
+    1. Enter the years test data with Yr toggle selected and note EMI (Rs. 44,986)
+    2. Switch to Mo toggle and check tenure shows 240 months with same EMI
+    3. Switch back to Yr and check tenure shows 20 years with same EMI
+    4. Select Mo toggle, enter the months test data, and check EMI equals Rs. 13,493
+    5. Set tenure slider to 30 years and check EMI recalculates without error
+
+
+Expected Result:
+  Switching Yr/Mo converts tenure without changing EMI. Direct month entry calculates correctly. Maximum 30-year tenure is handled without error.
+
+
+
+--- 2.3 Calculations ---
+TC-FN-05 | P0 | Verify that Personal Loan tab calculates correctly
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+
+Test Data:
+  Tab: Personal Loan | Amount: Rs. 5,00,000 | Rate: 12% | Tenure: 5 years
+
+Steps:
+    1. Click the Personal Loan tab
+    2. Enter all test data values
+    3. Check Loan EMI, Total Interest Payable, and Total Payment
+    4. Check the pie chart in the results area
+
+
+Expected Result:
+  EMI and related outputs calculate correctly and the pie chart is present.
+
+
+TC-FN-06 | P0 | Verify that Car Loan EMI in Advance and Arrears calculate differently
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Car Loan tab is selected
+
+Test Data:
+  Tab: Car Loan | Amount: Rs. 8,00,000 | Rate: 9.5% | Tenure: 7 years
+
+Steps:
+    1. Click the Car Loan tab
+    2. Select EMI in Arrears, enter test data, and note the EMI
+    3. Select EMI in Advance, enter same test data, and note the EMI
+    4. Toggle back to Arrears and check outputs return to the original values
+    5. Check the pie chart updates with each scheme change
+
+
+Expected Result:
+  Advance and Arrears produce different EMI values for the same inputs. Outputs and pie chart update on each toggle and values stay consistent on re-select.
+
+
+TC-FN-07 | P0 | Verify that results update instantly when inputs change
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 50,00,000 | Rate: 9% | Tenure: 20 years
+
+Steps:
+    1. Enter all test data values
+    2. Change the interest rate using the slider
+    3. Check EMI, total interest, total payment, and pie chart update immediately without page reload
+    4. Drag all three sliders rapidly and check final values match slider positions with no stale results
+
+
+Expected Result:
+  All outputs and pie chart update immediately on input change. Final values are correct after rapid slider changes.
+
+
+
+--- 2.4 Output and Pie Chart ---
+TC-FN-08 | P0 | Verify that output values use correct formatting and pie chart renders correctly
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 50,00,000 | Rate: 9% | Tenure: 20 years
+  Also: Rs. 10,00,000 | 10.5% | 10 years for total payment check
+
+Steps:
+    1. Enter the 50L test data and check EMI, Total Interest, and Total Payment use Rs. symbol and Indian comma formatting
+    2. Check the pie chart is visible with green (Principal) and orange (Total Interest) segments
+    3. Check percentage labels total approximately 100% (Principal ~46%, Interest ~54%)
+    4. Change the interest rate and check pie chart segments and percentages update
+    5. Enter the 10L test data and confirm Total Payment approximately equals EMI multiplied by 120 months
+
+
+Expected Result:
+  All values use Indian formatting. Pie chart renders with correct labels, percentages, and real-time updates. Total Payment equals EMI times tenure within rounding tolerance.
+
+
+
+--- 2.5 Payment Schedule ---
+TC-FN-09 | P0 | Verify that payment schedule displays correctly and totals match
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 10,00,000 | Rate: 10.5% | Tenure: 10 years
+
+Steps:
+    1. Enter all test data values
+    2. Check the payment schedule section is visible below results
+    3. Select Calendar Year wise and check grouping by calendar year
+    4. Select Financial Year wise and check grouping by financial year
+    5. Note Total Payment from results and sum all schedule rows
+
+
+Expected Result:
+  Schedule is visible with correct calendar and financial year views. Schedule total matches Total Payment within rounding tolerance.
+
+
+
+--- 2.6 Export and Share ---
+TC-FN-10 | P1 | Verify that PDF and Excel exports match on-screen values
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+  - Browser allows file downloads
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 10,00,000 | Rate: 10.5% | Tenure: 10 years
+
+Steps:
+    1. Enter all test data values
+    2. Click Download PDF, open the file, and check EMI, inputs, and schedule match on-screen values
+    3. Click Download Excel, open the file, and check values match on-screen results
+
+
+Expected Result:
+  Both PDF and Excel download successfully and values match on-screen results.
+
+
+TC-FN-11 | P0 | Verify that share link preserves and updates calculator inputs
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+  - Incognito or private browsing window is available
+
+Test Data:
+  Initial: Rs. 50,00,000 | 9% | 20 years
+  Updated: Rs. 25,00,000 | 7.5% | 15 years
+
+Steps:
+    1. Enter initial test data and copy the share link
+    2. Check the URL contains parameters reflecting entered values
+    3. Open the link in incognito and check inputs pre-fill with EMI Rs. 44,986
+    4. Change inputs to updated test data and copy the new share link
+    5. Open the new link in incognito and check updated values load, not the original
+
+
+Expected Result:
+  Share link encodes current inputs. Opening in a fresh session pre-fills values with matching results. Updated link reflects changed inputs.
+
+
+
+================================================================================
+3. UI TESTING
+================================================================================
+TC-UI-01 | P1 | Verify that sliders and results area behave smoothly during interaction
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Adjust all three sliders
+
+Steps:
+    1. Drag the loan amount, interest rate, and tenure sliders
+    2. Check values update continuously while dragging
+    3. Adjust all inputs rapidly and check the results area updates without excessive flicker or layout jump
+
+
+Expected Result:
+  Sliders move smoothly with continuous value updates. Results area remains stable during rapid changes.
+
+
+
+================================================================================
+4. NEGATIVE TESTING
+================================================================================
+TC-NEG-01 | P0 | Verify that calculator handles all minimum input values without error
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Amount: Rs. 0 | Rate: 5% | Tenure: 0 years
+
+Steps:
+    1. Set all inputs to minimum values
+    2. Check the calculator output area responds without error
+    3. Check the browser console shows no JavaScript errors
+
+
+Expected Result:
+  The calculator handles minimum values without crash or JavaScript errors.
+
+
+TC-NEG-02 | P0 | Verify that calculator handles all maximum input values without error
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Amount: Rs. 2,00,00,000 | Rate: 20% | Tenure: 30 years
+
+Steps:
+    1. Set all inputs to maximum values
+    2. Check the calculator output is displayed
+    3. Check displayed numbers do not overflow or render incorrectly
+
+
+Expected Result:
+  The calculator calculates correctly and numbers do not overflow or display incorrectly.
+
+
+TC-NEG-03 | P1 | Verify that invalid and edge inputs are handled without crash
+--------------------------------------------------------------------------------
+Preconditions:
+  - User is on https://emicalculator.net/
+  - Calculator module is visible
+  - Home Loan tab is selected
+
+Test Data:
+  Invalid amount: abc!@# | Rate above max: 25% | Zero rate: 0% | Clear field: empty amount
+
+Steps:
+    1. Type abc!@# in the amount field, tab out, and check input is rejected or sanitized
+    2. Type 25 in the interest rate field, tab out, and check value is capped at 20% or rejected
+    3. Enter Rs. 10,00,000, 0% rate, 10 years and check calculator handles without error
+    4. Clear the loan amount field completely, tab out, and check default restores or validation shows
+
+
+Expected Result:
+  Invalid input is handled gracefully. Rate above maximum is capped or rejected. Zero rate and cleared field do not crash the calculator.
+
+
+
+================================================================================
+5. COMPATIBILITY TESTING
+================================================================================
+TC-CMP-01 | P0 | Verify that calculator works correctly on Chrome desktop
+--------------------------------------------------------------------------------
+Preconditions:
+  - https://emicalculator.net/ is accessible
+  - Chrome latest version on desktop, 1920x1080 resolution
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 10,00,000 | Rate: 10.5% | Tenure: 10 years
+
+Steps:
+    1. Open the site in Chrome on desktop
+    2. Enter smoke test data on the Home Loan tab
+    3. Check Loan EMI equals Rs. 13,493
+    4. Switch through all three loan tabs
+    5. Check the pie chart in the results area
+
+
+Expected Result:
+  EMI equals Rs. 13,493, all loan tabs work correctly, and the pie chart is present.
+
+
+TC-CMP-02 | P1 | Verify that calculator works correctly on Firefox, Safari, and Edge desktop
+--------------------------------------------------------------------------------
+Preconditions:
+  - https://emicalculator.net/ is accessible
+  - Firefox, Safari, and Edge latest versions on desktop, 1920x1080 resolution
+
+Test Data:
+  Tab: Home Loan | Amount: Rs. 50,00,000 | Rate: 9% | Tenure: 20 years
+
+Steps:
+    1. Repeat the following in Firefox, Safari, and Edge:
+       a. Open the site and enter smoke test data
+       b. Check Loan EMI equals Rs. 44,986
+       c. Switch through all three loan tabs
+       d. Check the pie chart in the results area
+
+
+Expected Result:
+  EMI equals Rs. 44,986 on all three browsers. Calculator behaviour matches Chrome and the pie chart is present.
+
+
+
+SUMMARY
+================================================================================
+
+  Testing Type          Count
+  --------------------  -----
+  Smoke Testing           2
+  Functional Testing     11
+  UI Testing              1
+  Negative Testing        3
+  Compatibility Testing   2
+  --------------------  -----
+  Total                  19
+
+  P0:  15
+  P1:   4
+
+  Reduced from 71 cases by merging overlapping coverage:
+  - Tab, input sync, and boundary cases combined per field
+  - Duplicate calculation baselines removed (covered by smoke)
+  - Pie chart, formatting, and output cases merged
+  - Payment schedule views combined into one case
+  - Export PDF/Excel and cross-browser cases consolidated
+  - P2 UI polish cases removed (out of scope for sign-off)

@@ -1,0 +1,206 @@
+EMI CALCULATOR - TEST PLAN (CALCULATOR MODULE ONLY)
+================================================================================
+
+Site:       https://emicalculator.net/
+Scope:      Calculator widget only (not full page)
+Date:       June 23, 2026
+Owner:      Sharad Chhunju
+
+
+1. CONTEXT
+--------------------------------------------------------------------------------
+
+The EMI Calculator is a financial product that helps users estimate loan repayments.
+This test plan covers the calculator module only - not the rest of the page.
+
+Calculator module includes:
+  - Loan type tabs (Home, Personal, Car)
+  - Input fields and sliders (amount, interest rate, tenure)
+  - Results panel (EMI, total interest, total payment, pie chart)
+  - Payment schedule (calendar year / financial year views)
+  - Export and share actions tied to the calculator (PDF, Excel, share link)
+
+Users enter loan amount, interest rate, and tenure. The calculator returns monthly EMI,
+total interest, total repayment, a pie chart, and a year-wise payment schedule.
+
+Bottom line: if the numbers are wrong, people make real financial decisions on bad
+data. Calculation accuracy is our number one concern. Everything else is secondary.
+
+
+2. SCOPE - CALCULATOR ONLY
+--------------------------------------------------------------------------------
+
+IN SCOPE (calculator module only):
+
+  [P0 - must pass before we sign off]
+    - EMI, total interest, total payment calculations (all 3 loan tabs)
+    - Input-to-output flow: slider, text box, instant recalculation
+    - Yr/Mo tenure toggle - conversion must not change the EMI
+    - Car loan: EMI in Advance vs EMI in Arrears
+    - Payment schedule within the calculator block
+
+  [P1 - should pass, document if not]
+    - Pie chart renders and percentages add to 100%
+    - Payment schedule totals match the headline numbers
+    - Share link pre-fills calculator inputs correctly in a fresh session
+    - PDF and Excel exports from the calculator match on-screen values
+    - Calculator behaviour consistent on Chrome, Firefox, Safari, Edge (desktop)
+
+  [P2 - nice to have, log bugs but don't block]
+    - Keyboard tab order within calculator inputs
+    - Calculator controls load and respond without delay
+    - Visual polish inside the calculator (legend, toggle styling)
+
+OUT OF SCOPE (entire page - do not test, do not log bugs):
+
+  - Page header, navigation menu, footer, site branding
+  - Content below the calculator ("What is EMI?", articles, featured links)
+  - Comments section, blog posts, product reviews, news sections
+  - Other calculators or pages (prepayment, credit card, loan calculator, Android app)
+  - Page-level SEO, analytics, ads, privacy/terms links
+  - Responsiveness (mobile, tablet, viewport resizing) - desktop only for this cycle
+  - Full page load performance, page layout outside the calculator widget
+
+NOTE: Responsiveness is intentionally out of scope. All testing assumes desktop
+viewport (1920x1080). Stay inside the calculator UI - ignore how the rest of the
+page looks or behaves.
+
+NOTE: Open the page only to reach the calculator. Do not file defects for anything
+outside the calculator boundary unless it directly prevents using the calculator
+(e.g. calculator never renders).
+
+
+3. TEST APPROACH
+--------------------------------------------------------------------------------
+
+Phase 1 - Smoke
+  Open the page and locate the calculator module. Run these two baseline checks:
+
+    Home loan, Rs. 10,00,000, 10.5%, 10 years
+      Expected: EMI Rs. 13,493 | Interest Rs. 6,19,220 | Total Rs. 16,19,220
+
+    Home loan, Rs. 50,00,000, 9%, 20 years
+      Expected: EMI Rs. 44,986 | Interest Rs. 57,96,711 | Total Rs. 1,07,96,711
+
+  Allow +/- Rs. 1 for rounding. If EMI is off, stop and escalate. No point testing
+  UI if the core math is broken.
+
+Phase 2 - Functional depth
+  Execute test cases from TestRail. Cover all in-scope items from Section 2,
+  including all three loan tabs (Home, Personal, Car).
+
+Phase 3 - Compatibility
+  Hit P0 calculator cases on Firefox, Safari, Edge (desktop only).
+  Chrome desktop is primary - we only care that the calculator works the same.
+
+Phase 4 - Regression
+  Re-run all P0 cases on any calculator change. P1 only if the fix touches that area.
+
+Automation note:
+  If we automate anything, start with calculation regression.
+  UI slider tests are flaky - manual is fine for now.
+
+
+4. ENVIRONMENT
+--------------------------------------------------------------------------------
+
+  URL:      https://emicalculator.net/
+  Browser:  Chrome, Firefox, Safari, Edge (latest stable, desktop)
+
+
+5. ENTRY / EXIT CRITERIA
+--------------------------------------------------------------------------------
+
+We start when:
+  - Page is live and calculator module is visible
+  - Test cases with test data are ready in TestRail
+  - This plan is reviewed and agreed by the team
+
+We sign off when:
+  - 100% of P0 calculator tests pass
+  - 90%+ of P1 calculator tests pass (any failures documented with business impact)
+  - Zero open P0 bugs in the calculator module
+  - P1 bugs either fixed, accepted with documented workaround, or explicitly waived
+    by PM with reason
+  - Test summary report submitted
+
+
+6. FOCUS AREAS
+--------------------------------------------------------------------------------
+
+  - Years vs months toggle - switching between Yr and Mo should not change the EMI
+  - Car loan Advance vs Arrears - these give different results; test both separately
+  - Share link - copied link should reopen with the same inputs and results
+  - Payment schedule - yearly breakdown should add up to the total payment shown above
+  - Loan amount entry - test typing values, pasting with commas, and min/max limits
+
+
+7. BUG SEVERITY - USE THIS WHEN LOGGING
+--------------------------------------------------------------------------------
+
+  P0 / Blocker
+    Wrong EMI by > Rs. 100 on standard inputs
+    Calculator crash, blank results, JS error on calculator happy path
+    Share link drops or corrupts calculator data
+    Schedule total wildly off from headline total
+    -> Stop testing affected area, notify QA Lead same day
+
+  P1 / Major
+    Calculator export (PDF/Excel) numbers differ from screen
+    Calculator feature broken (share, PDF, a loan tab)
+    Tenure toggle changes the EMI (it shouldn't)
+    -> Log with screenshot of calculator area + steps, continue other areas
+
+  P2 / Minor
+    Formatting inconsistency inside calculator, brief sync lag, chart legend off
+    -> Log it, keep going, include in final report
+
+  P3 / Trivial
+    Cosmetic issue inside calculator only, one-browser alignment in chart legend
+    -> Log only if you're already filing something else in that area
+
+  Do NOT log P2/P3 for page header, footer, articles, or nav - out of scope.
+
+  When in doubt on severity, check with QA Lead.
+
+
+8. TEAM ASSIGNMENTS 
+--------------------------------------------------------------------------------
+
+  Tester A - Calculator calculations + all three loan tabs
+  Tester B - Calculator inputs, sliders, sync, tenure toggle, edge cases
+  Tester C - Calculator schedule, exports, share links, cross-browser
+
+  QA Lead - Review bug triage daily, run calculator smoke after any fix,
+            own the sign-off call with PM.
+
+  Daily standup: pass count, open P0/P1, blockers. 15 min max.
+
+
+9. DELIVERABLES
+--------------------------------------------------------------------------------
+
+  1. This test plan (final version after team review)
+  2. Test cases with test data in TestRail
+  3. Test execution results in TestRail - pass/fail, tester name, date
+  4. Bug reports - steps, expected vs actual, screenshot, console log if JS error
+  5. Test summary report containing:
+       - Calculator scope tested vs not tested
+       - Pass/fail counts by priority
+       - Open defects with severity and recommendation (ship / don't ship)
+       - Risks accepted (if any) with PM sign-off
+  6. Sign-off sheet
+
+
+10. SIGN-OFF
+--------------------------------------------------------------------------------
+
+  Recommendation:  [ ] APPROVE   [ ] APPROVE WITH CONDITIONS   [ ] DO NOT APPROVE
+
+  Conditions / notes:
+  _____________________________________________________________________________
+  _____________________________________________________________________________
+
+  QA Lead:            _______________  Date: _______
+  Project Manager:    _______________  Date: _______
+  Business Owner:      _______________  Date: _______
